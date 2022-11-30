@@ -1,4 +1,4 @@
-const express = require('express')
+const koa = require('koa')
 const compression = require('compression')
 const cookieParser = require('cookie-parser')
 const csrf = require('xsrf')
@@ -6,7 +6,7 @@ const registerRouter = require('./router')
 
 const port = process.env.PORT || 9002
 
-const app = express()
+const app = koa()
 
 const csrfProtection = csrf({
   cookie: true,
@@ -25,7 +25,14 @@ registerRouter(app)
 
 app.use(compression())
 
-app.use(express.static('./dist'))
+const ks = require('koa-static')
+app.use(ks('./dist'),
+    {
+      index: false, // 默认为 true 访问的文件为index.html，可以修改为其他文件名或false
+      hidden: false, // 是否同意传输隐藏文件
+      defer: true // true 表示返回next()之后进行服务，从而允许后续中间件先进行响应
+    }
+)
 
 app.use(function (err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') {

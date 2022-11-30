@@ -197,13 +197,15 @@ function registerRecommend(app) {
         }
 
         // 往前端发送一个标准格式的响应数据，包括成功错误码和数据
-        res.json({
-          code: ERR_OK,
-          result: {
-            sliders,
-            albums
-          }
-        })
+        setTimeout(() => {
+          res.json({
+            code: ERR_OK,
+            result: {
+              sliders,
+              albums
+            }
+          })
+        }, 1000);
       } else {
         res.json(data)
       }
@@ -248,7 +250,7 @@ function registerSingerList(app) {
         }
 
         singerList.forEach((item) => {
-          // 把歌手名转成拼音
+          // 借助pinyin库把歌手名转成拼音
           const p = pinyin(item.singer_name)
           if (!p || !p.length) {
             return
@@ -316,11 +318,12 @@ function registerSingerDetail(app) {
   app.get('/api/getSingerDetail', (req, res) => {
     const url = 'https://u.y.qq.com/cgi-bin/musics.fcg'
 
+    // 构建请求参数 singerMid 表示歌手的mid唯一标识
     const data = JSON.stringify({
       comm: { ct: 24, cv: 0 },
       singerSongList: {
         method: 'GetSingerSongList',
-        param: { order: 1, singerMid: req.query.mid, begin: 0, num: 100 },
+        param: { order: 1, singerMid: req.query.mid, begin: 0, num: 10 },
         module: 'musichall.song_list_server'
       }
     })
