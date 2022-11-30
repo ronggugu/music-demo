@@ -1,4 +1,4 @@
-# vue-music-next
+# vue-music--next
 
 ## Project setup
 ```

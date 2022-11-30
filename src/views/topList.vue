@@ -1,4 +1,4 @@
-<template>歌手</template>
+<template>排行榜</template>
 
 <script>
 import { defineComponent } from "vue";
